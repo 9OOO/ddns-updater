@@ -133,7 +133,7 @@ func main() {
 	updater := update.NewUpdater(db, logger, client, e.Notify)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	forceUpdate := trigger.StartUpdates(ctx, updater, idToPeriod, e.CheckError)
+	forceUpdate := trigger.StartUpdates(ctx, updater, db, idToPeriod, e.CheckError)
 	forceUpdate()
 	productionHandlerFunc := handlers.NewHandler(rootURL, dir, db, logger, forceUpdate, e.CheckError).GetHandlerFunc()
 	healthcheckHandlerFunc := libhealthcheck.GetHandler(func() error {

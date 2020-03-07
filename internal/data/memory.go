@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"net"
 
 	"github.com/qdm12/ddns-updater/internal/models"
 )
@@ -29,4 +30,16 @@ func (db *database) SelectAll() (records []models.Record) {
 	db.RLock()
 	defer db.RUnlock()
 	return db.data
+}
+
+func (db *database) SetPublicIP(ip net.IP) {
+	db.Lock()
+	defer db.Unlock()
+	db.publicIP = ip
+}
+
+func (db *database) GetPublicIP() net.IP {
+	db.RLock()
+	defer db.RUnlock()
+	return db.publicIP
 }

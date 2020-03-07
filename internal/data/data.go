@@ -1,6 +1,7 @@
 package data
 
 import (
+	"net"
 	"sync"
 
 	"github.com/qdm12/ddns-updater/internal/models"
@@ -13,12 +14,15 @@ type Database interface {
 	Select(id int) (record models.Record, err error)
 	SelectAll() (records []models.Record)
 	Update(id int, record models.Record) error
+	SetPublicIP(ip net.IP)
+	GetPublicIP() net.IP
 	// From persistence database
 	GetEvents(domain, host string) (events []models.HistoryEvent, err error)
 }
 
 type database struct {
-	data []models.Record
+	data     []models.Record
+	publicIP net.IP
 	sync.RWMutex
 	persistentDB persistence.Database
 }
